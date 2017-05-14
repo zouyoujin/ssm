@@ -4,6 +4,7 @@
   "description": "webui",
   "main": "index.js",
   "scripts": {
+    "server": "cd server && json-server db.json -w -p 3000",
     "start": "webpack-dev-server --history-api-fallback --hot --inline --process --colors --port 8000",
     "dev":"webpack -p --progress --colors  --w",
     "build": "webpack -p --progress --colors  --profile"
