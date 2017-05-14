@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>SpreadJS自定义单元格—双色字体TreeGrid</title>
+    <link href="./assets/lib/gc.spread.sheets.excel2013white.10.0.1.css" rel="stylesheet" />
+    <script src="./assets/lib/jquery-1.8.2.min.js"></script>
+    <!-- <script src="./assets/lib/gc.spread.sheets.all.10.1.0.min.js"></script> -->
+	<script src="./assets/lib/gc.spread.sheets.all.10.0.1.min.js"></script>
+    <style type="text/css">
+	body{font-family: '微软雅黑';}
+        .example {
+          background-color: #d1c6d6;
+          padding: 1.25em 1.45em 3em 1.55em;
+          margin: 0.5em 0 3em 0;
+          -moz-border-radius: 1em;
+          -webkit-border-radius: 1em;
+          border-radius: 1em;
+          opacity: 0.9;
+          -moz-box-shadow: 0 0 1.1em #666;
+          -webkit-box-shadow: 0 0 1.1em #666;
+          box-shadow: 0 0 1.1em #666;     
+          width:982px;
+          margin:50px auto;
+        }
+    </style>
+    <script type='text/javascript' charset='utf-8'>
+		GC.Spread.Sheets.LicenseKey = "E453135719435255#A0jhC7ZiojIz5GRiwiIv5WZEBSe4l6QlBXYydkI0ISYONkIsUWdyRnOiwmdFJCLiUTNyUzM4kTM7UzMxMTN4IiOiQWSisnOiQkIsISP3ElMWpUbDR5LTh7Tzd4aTNWMONkNHlGbhBTbMN7VF9WZip5NYJ5ZxRGSiJWWsJWZOdkMjFmSVZFT7s6LOVldX54ZB3WVB36aaVDUhF7aXJ4St5GV9ZjbiojITJCL4EDO8kjN4kTM0IicfJye&Qf35VfiEzRwEkI0IyQiwiIwEjL6ByUKBCZhVmcwNlI0IiTis7W0ICZyBlIsISOwATMwEDI8ATMxYTMwIjI0ICdyNkIsISbvNmL6VGZ9RXajVGchJ7ZsI7au26YukHdpNWZwFmcnxicr9ybj9SZu3GduVmbvBXbvNGL4VmbukHdpNWZwFmcnxSbvNmLvlGZ5R7ckFWZyB7cjdGLuNmLt36YuMHbv3GdyV6dvB7YnxSbvNmL9RXvjAG";
+        $(document).ready(function () {
+            //Set tree grid.
+            var ns = GC.Spread.Sheets;
+            function TreeNodeCellType() {
+
+            }
+            TreeNodeCellType.prototype = new ns.CellTypes.Text();
+
+            TreeNodeCellType.prototype.paint = function (ctx, value, x, y, w, h, style, options) {
+                var level = options.sheet.rowOutlines.getLevel(options.row);
+                var nlevel = -1;
+                if (options.row < options.sheet.getRowCount() - 1) {
+                    nlevel = options.sheet.rowOutlines.getLevel(options.row + 1);
+                }
+                var hoffset = (level + 2) * 12;
+                x += hoffset;
+                w -= hoffset;
+
+                var image;
+                if (nlevel > level) {
+                    image = document.getElementById('image1');
+                }
+                else {
+                    image = document.getElementById('image2');
+                }
+
+                var imageWidth = image.width, imageMagin = 3, imageLayoutWidth = imageWidth + imageMagin * 2;
+                x += imageLayoutWidth;
+                w -= imageLayoutWidth;
+                GC.Spread.Sheets.CellTypes.Base.prototype.paint.apply(this, arguments);
+
+                if (options.row == options.sheet.getRowCount() - 1) return; //last row
+
+                if (nlevel > level) {
+                    var collapsed = options.sheet.rowOutlines.isCollapsed(options.row + 1);
+                    x -= imageLayoutWidth;
+                    w += imageLayoutWidth;
+                    var imageX = x + imageMagin, imageY = y + h / 2 - image.height / 2;
+                    x--;
+                    y += h / 2 - 3;
+                    ctx.save();
+                    ctx.fillStyle = "black";
+                    ctx.beginPath();
+                    if (collapsed) {
+                        ctx.moveTo(x - 5, y);
+                        ctx.lineTo(x, y + 3);
+                        ctx.lineTo(x - 5, y + 6);
+                    } else {
+                        ctx.moveTo(x, y);
+                        ctx.lineTo(x, y + 5);
+                        ctx.lineTo(x - 5, y + 5);
+                    }
+                    ctx.fill();
+                    ctx.restore();
+                    ctx.drawImage(image, imageX, imageY);
+                }
+                else {
+                    x -= imageLayoutWidth;
+                    w += imageLayoutWidth;
+                    var imageX = x + imageMagin, imageY = y + h / 2 - image.height / 2;
+                    x--;
+                    y += h / 2 - 3;
+                    ctx.save();
+                    ctx.drawImage(image, imageX, imageY);
+                    ctx.restore();
+                }
+            };
+            // override getHitInfo to allow cell type get mouse messages
+            TreeNodeCellType.prototype.getHitInfo = function (x, y, cellStyle, cellRect, context) {
+                return {
+                    x: x,
+                    y: y,
+                    row: context.row,
+                    col: context.col,
+                    cellStyle: cellStyle,
+                    cellRect: cellRect,
+                    sheetArea: context.sheetArea
+                };
+            }
+            TreeNodeCellType.prototype.processMouseDown = function (hitinfo) {
+                var level = hitinfo.sheet.rowOutlines.getLevel(hitinfo.row);
+                var hoffset = (level + 2) * 12 + hitinfo.cellRect.x;
+                if (hitinfo.x < hoffset && hitinfo.x > hoffset - 10) {
+                    var collapsed = hitinfo.sheet.rowOutlines.isCollapsed(hitinfo.row + 1);
+                    hitinfo.sheet.rowOutlines.setCollapsed(hitinfo.row, !collapsed);
+                    hitinfo.sheet.invalidateLayout();
+                    hitinfo.sheet.repaint();
+                }
+            };
+
+            function ColorCellType() {
+
+            }
+            ColorCellType.prototype = new ns.CellTypes.Text();
+            ColorCellType.prototype.paintText = function (ctx, value, x, y, w, h, style, options, text, conditionalForeColor, opacity) {
+                if (!text) {
+                    return;
+                }
+                ctx.save();
+                ctx.beginPath();
+
+
+                var fillStyle = style.foreColor,
+                    font = style.font;
+                if (font && ctx.font !== font) {
+                    ctx.font = font;
+                }
+
+                var indent = 0,
+                    textIndent = style.textIndent,
+                    wordWrap = style.wordWrap,
+                    hAlign = style.hAlign,
+                    vAlign = style.vAlign,
+                    textDecoration = style.textDecoration,
+                    textAlign = "left",
+                    textBaseline = "alphabetic",
+                    adjX = 2,
+                    adjY = 2,
+                    textHeight = 0,
+                    lineHeight = options.lineHeight,
+                    lines = [],
+                    lineCount = 0,
+                    fontSize = options.fontInfo.fontSize;
+
+                if (textIndent > 0) {
+                    indent = textIndent * 8;
+                }
+
+                //textAlign
+                adjX += indent;
+                if (hAlign === ns.HorizontalAlign.center) {
+                    adjX = w / 2;
+                    textAlign = "center";
+                } else if (hAlign === ns.HorizontalAlign.right) {
+                    adjX = w - 1 - 2;   // - 2 is for the left and the right border line, - 1 is for begining from the left side of the right double line.
+                    adjX -= indent;
+                    textAlign = "right";
+                }
+                if (ctx.textAlign !== textAlign) {
+                    ctx.textAlign = textAlign;
+                }
+
+                var redString, blackString;
+                if (text.length > 3) {
+                    redString = text.substring(text.length - 3, text.length);
+                    blackString = text.substring(0, text.length - 3);
+                } else {
+                    redString = text;
+                }
+
+                var redStart = x;
+                if (blackString) {
+                    var blackWidth = ctx.measureText(blackString).width;
+                    redStart += blackWidth;
+                    if (hAlign === ns.HorizontalAlign.center) {
+                        adjX -= blackWidth / 2;
+                    } else if (hAlign === ns.HorizontalAlign.right) {
+                        adjX -= (ctx.measureText(redString).width);
+                    }
+                    ctx.fillStyle = "black";
+                    ctx.fillText(blackString, x + adjX, y + options.lineHeight + adjY);
+                }
+                ctx.fillStyle = "red";
+
+                ctx.fillText(redString, redStart + adjX, y + options.lineHeight + adjY);
+                ctx.restore();
+            };
+
+
+            var spread = new GC.Spread.Sheets.Workbook($("#ss")[0]);
+            spread.options.tabStripVisible = false;
+            spread.options.showHorizontalScrollbar = false;
+            spread.options.showVerticalScrollbar = false;
+
+            var sheet = spread.getActiveSheet();
+
+            sheet.suspendPaint();
+            sheet.suspendEvent();
+            sheet.rowOutlines.direction(GC.Spread.Sheets.Outlines.OutlineDirection.backward);
+            sheet.getRange(-1, 0, -1, 1).cellType(new TreeNodeCellType());
+
+            sheet.setValue(0, 0, "Permanent Differences");
+            sheet.setValue(1, 0, "Permanent Differences");
+            sheet.setValue(2, 0, "4P01 - Club Dues");
+            sheet.setValue(3, 0, "4P02 - Business Gifts");
+            sheet.setValue(4, 0, "4P03 - Int Inc-Muni Borads");
+            sheet.setValue(5, 0, "4P04 - Lobbying Expense");
+            sheet.setValue(6, 0, "4P05 - Skybox");
+            sheet.setValue(7, 0, "4P06 - Stock Options-Perm");
+            sheet.setValue(8, 0, "4P07 - M&E");
+            sheet.setValue(9, 0, "Total Permanent Differences");
+            sheet.setValue(10, 0, "Capital Loss Limitation");
+            sheet.setValue(11, 0, "Capital Gain/Loss, Sum included in Book income");
+            sheet.setValue(12, 0, "Capital Loss Disallowed");
+            sheet.setValue(13, 0, "Charitable Contribution Limitation");
+            sheet.setValue(14, 0, "Charitable Contributions included in Book income");
+            sheet.setValue(15, 0, "Demestic production activities deduction included in Book income");
+            sheet.setValue(16, 0, "Fedeeral Taxable Income Limitation");
+            sheet.setValue(17, 0, "Limitation percentage");
+            sheet.setValue(18, 0, "Charitable Contribution limitation");
+            sheet.setValue(19, 0, "Charitable Contributions disallowed");
+            sheet.setValue(20, 0, "Federal Taxable Income before Net Operating Loss Deduction");
+            sheet.rowOutlines.group(1, 9);
+            sheet.rowOutlines.group(3, 8);
+            sheet.rowOutlines.group(12, 2);
+            sheet.rowOutlines.group(15, 6);
+            sheet.getRange(-1, 0, -1, 1).width(300);
+            sheet.showRowOutline(false);
+
+
+            sheet.getRange(-1, 1, -1, 1).cellType(new ColorCellType());
+            var A = 30;
+            var B = 30000;
+            var lev = 1;
+            var secondlev = 1;
+            for (var i = 0; i < 21; i++) {
+                var level = sheet.rowOutlines.getLevel(i);
+                if (level == -1) {
+                    lev = 1;
+                    secondlev = 1;
+                    sheet.setValue(i, 1, "---");
+                }
+                else if (level == 0) {
+                    sheet.setValue(i, 1, "00" + lev);
+                    lev++;
+                    secondlev = 1;
+                }
+                else {
+                    sheet.setValue(i, 1, "00" + lev + "00" + secondlev);
+                    secondlev++;
+                }
+
+                sheet.setValue(i, 2, "m3");
+                sheet.setValue(i, 3, (500 - 1) * Math.random() + 1);
+                sheet.getCell(i, 3).formatter("#,##0.00");
+                sheet.setValue(i, 4, (B - A) * Math.random() + A);
+                sheet.getCell(i, 4).formatter("#,##0.00");
+                sheet.setFormula(i, 5, '=D' + (i + 1).toString() + '*E' + (i + 1).toString());
+                sheet.getCell(i, 5).formatter("¥#,##0.00");
+            }
+
+            var h = ns.SheetArea.colHeader;
+
+            sheet.setColumnCount(6, h);
+            sheet.setColumnCount(6, GC.Spread.Sheets.SheetArea.viewport);
+
+            sheet.setRowCount(2, h);
+
+            sheet.addSpan(0, 0, 2, 1, h);
+            sheet.setValue(0, 0, "任务名称", h);
+
+            sheet.addSpan(0, 1, 2, 1, h);
+            sheet.setValue(0, 1, "任务编码", h);
+
+            sheet.addSpan(0, 2, 2, 1, h);
+            sheet.setValue(0, 2, "单位", h);
+
+            sheet.addSpan(0, 3, 1, 3, h);
+            sheet.setValue(0, 3, "施工图清单", h);
+
+            sheet.setValue(1, 3, "数量", h);
+            sheet.setValue(1, 4, "单价", h);
+            sheet.setValue(1, 5, "合价", h);
+
+            sheet.getRange(-1, 1, -1, 4).width(100);
+            sheet.getRange(-1, 5, -1, 5).width(150);
+            sheet.setRowCount(22);
+            sheet.getRange(-1, 1, -1, 1).hAlign(ns.HorizontalAlign.left);
+
+            sheet.resumeEvent();
+            sheet.resumePaint(false);
+
+        });
+
+
+    </script>
+
+</head>
+<body>
+    <div style="color:#733b84">
+        <div class="example">
+            <h1 style="text-align:center">SpreadJS自定义单元格—双色字体TreeGrid</h1>
+            <P style="text-indent:30px;color:black;">本示例使用了JqueryUI的smoothness主题外观，采用单个工作表和隐藏滚动条的结构，含合并单元格的双行列头，双色文字自定义单元格，以及树节点自定义单元格。</P>
+            <div id="ss" style="width:890px; height:460px;border: 1px solid gray; margin:0 auto"></div>
+            <div style="display:none">
+                <img id="image1" src="./assets/lib/folder.png" alt="" width="15" height="15" />
+                <img id="image2" src="./assets/lib/002.png" alt="" width="15" height="15" />
+            </div>
+        </div>
+    </div>
+</body>
+</html>
