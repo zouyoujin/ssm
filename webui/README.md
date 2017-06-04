@@ -1,4 +1,5 @@
 npm install webpack-dev-server --save-dev
+npm install  typescript@2.1.5 -g
 
 Install Tools
 
