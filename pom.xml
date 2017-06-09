@@ -144,7 +144,7 @@
 
 	<modules>
 		<module>ssm.common</module>
-    <module>webui</module>
+		<module>webui</module>
   </modules>
 
 	<build>
