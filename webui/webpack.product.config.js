@@ -31,7 +31,7 @@ var plugins = [
 // 全局性依赖，手动配置
 var globalEntrys = function (entrys) {
 	entrys = entrys || {};
-	entrys['commonlib'] = ['react', 'react-dom', 'react-router', 'react-redux'];
+	entrys['commonlib'] = ['react', 'react-dom', 'react-router'];
 	plugins.push(new CommonsChunkPlugin({ // 注意顺序,被依赖的要放到数组后边
 		name: ['commonlib'],
 		minChunks: Infinity

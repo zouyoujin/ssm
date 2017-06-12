@@ -1,17 +1,17 @@
 {
 	"compilerOptions": {
-		//"strictNullChecks": false,
+		"strictNullChecks": true,
 		"moduleResolution": "node",
 		"allowSyntheticDefaultImports": true,
 		"experimentalDecorators": true,
+		"preserveConstEnums": true,
 		"jsx": "preserve",
+		"removeComments": false,
+		"noImplicitReturns": true,
+		"noImplicitAny": false,
 		//"noUnusedParameters": true,
 		//"noUnusedLocals": true,
-		"target": "es6",
-		"lib": [
-			"dom",
-			"es7"
-		]
+		"target": "es6"
 	},
 	"exclude": [
 		"node_modules"
