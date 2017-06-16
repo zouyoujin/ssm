@@ -9,8 +9,6 @@
 		"removeComments": false,
 		"noImplicitReturns": true,
 		"noImplicitAny": false,
-		//"noUnusedParameters": true,
-		//"noUnusedLocals": true,
 		"target": "es6"
 	},
 	"exclude": [
