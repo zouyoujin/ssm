@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssm.basedata.model.mapper.UserMapper">
+	
+	<resultMap id="BaseResultMap" type="com.ssm.common.model.User">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="password" jdbcType="VARCHAR" property="password" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+	</resultMap>
+	
+	<insert id="insert" parameterType="com.ssm.common.model.User">
+		<selectKey order="AFTER" keyProperty="id" resultType="java.lang.Long">
+			SELECT currval('tbl_user_sequence')
+		</selectKey>
+		insert into tbl_user (id,username,password,create_time,update_time)
+		values (
+			nextVal('tbl_user_sequence'),
+			#{username,jdbcType=VARCHAR},
+			#{password,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{updateTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from tbl_user
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	
+	<!-- 用户自定义SQL文件部分开始 -->
+	<insert id="batchInsertRecord" parameterType="java.util.List">  
+	    insert into tbl_user (id,username,password,create_time,update_time)
+		values
+	    <foreach collection="list" index="index" item="item" separator=",">
+			nextVal('tbl_user_sequence'),
+			#{username,jdbcType=VARCHAR},
+			#{password,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{updateTime,jdbcType=TIMESTAMP}
+	    </foreach>  
+	</insert>
+	
+	<update id="batchUpdateRecord" parameterType="java.util.List">
+		<foreach close="" collection="list" index="index" item="item" open="" separator=";">
+			update tbl_user
+			set username = #{item.username,jdbcType=VARCHAR},
+			password = #{item.password,jdbcType=VARCHAR},
+			update_time = #{item.updateTime,jdbcType=TIMESTAMP}
+			where id = #{item.id,jdbcType=BIGINT}
+		</foreach>
+	</update>
+	
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap">
+		select t.id,t.username,t.password,t.create_time,t.update_time from tbl_user t
+		where t.id = #{item.id,jdbcType=BIGINT}
+	</select>
+		
+	<select id="selectAll" resultMap="BaseResultMap">
+		select t.id,t.username,t.password,t.create_time,t.update_time from tbl_user t
+	</select>
+	
+	<!-- 通用查询方法 -->
+	<select id="queryListMapByConditions" parameterType="java.util.Map" resultType="java.util.HashMap">
+		select ${columnNames} from ${tableName}
+		<if test="filters != null">
+			<where>
+				<foreach item="item" index="index" collection="filters" open=" " separator="and" close=" ">
+					<if test="item.fieldName != null and item.fieldName != ''">
+						<choose>  
+			                <when test="item.opt == 'LIKE'">
+			                	<!-- ESCAPE支持特殊字符查询如'%'、'_' -->
+								${item.fieldName} LIKE CONCAT('%',CONCAT('/',CONCAT(#{item.fieldValue}, '%'))) ESCAPE '/'
+			                </when>
+			                <when test="item.opt == 'IN'">
+			                	${item.fieldName} IN
+			                	<foreach item="values" index="index" collection="item.fieldValue" open=" (" separator="," close=")">
+									#{values}
+								</foreach>
+      						</when>  
+			                <otherwise>  
+								${item.fieldName} ${item.opt} '${item.fieldValue}'
+			                </otherwise>  
+			            </choose>
+					</if>
+				</foreach>
+			</where>
+		</if>
+		<if test="orders != null">
+			order by
+			<foreach item="item" index="index" collection="orders" separator=",">
+                ${item.fieldName} ${item.order}
+            </foreach>
+        </if>
+	</select>
+	<!-- 用户自定义SQL文件部分结束 -->
+</mapper>
