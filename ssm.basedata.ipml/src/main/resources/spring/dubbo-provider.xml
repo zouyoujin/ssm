@@ -22,7 +22,7 @@
 	3）subscribe是否向此注册中心订阅服务，如果设为false，将只注册，不订阅。
 	4）timeout注册中心请求超时时间(毫秒)。
 	5）address可以Zookeeper集群配置，地址可以多个以逗号隔开等。 -->
-	<dubbo:registry address="${zookeeper.address}" timeout="${zookeeper.timeout}" check="true" subscribe="false" register="true"/>
+	<dubbo:registry protocol="zookeeper" address="${zookeeper.address}" timeout="${zookeeper.timeout}" check="true" subscribe="false" register="true"/>
    
 	<!--uncomment this if you want to test dubbo's monitor -->
 	<!--<dubbo:monitor protocol="registry"/> -->
@@ -32,7 +32,7 @@
 
 	<!-- use the external tomcat or other server with the servlet approach; 
 		the port and contextpath must be exactly the same as those in external server -->
-	<dubbo:protocol name="http" port="8080" contextpath="ssm.basedata.ipml" server="servlet" />
+	<dubbo:protocol name="http" port="${dubbo.basedata.port}" contextpath="${dubbo.basedata.contextpath}" server="servlet" />
 	
 	<!-- 声明需要暴露的服务接口  --> 
 	<dubbo:service interface="com.ssm.basedata.service.UserService" ref="userServiceImpl" />

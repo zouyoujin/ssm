@@ -32,6 +32,9 @@
 		<mybatis-pagehelper.version>4.1.1</mybatis-pagehelper.version>
 		<dubbo.version>2.8.4</dubbo.version>
 		<zkclient.version>0.10</zkclient.version>
+		<resteasy.version>3.1.3.Final</resteasy.version>
+		<javax.inject.version>1</javax.inject.version>
+		
 		<ssm.common.version>0.0.1-SNAPSHOT</ssm.common.version>
 	</properties>
 
