@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:c="http://www.springframework.org/schema/c" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+	http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-3.2.xsd
+	http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd 
+	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<cache:annotation-driven cache-manager="cacheManager" />
+
+	<!--通过构造方法注入RedisNode -->
+	<bean id="redisNode1" class="org.springframework.data.redis.connection.RedisNode">
+		<constructor-arg value="${redisNode1.host}" />
+		<constructor-arg value="${redisNode1.port}" />
+	</bean>
+	<bean id="redisNode2" class="org.springframework.data.redis.connection.RedisNode">
+		<constructor-arg value="${redisNode2.host}" />
+		<constructor-arg value="${redisNode2.port}" />
+	</bean>
+	<bean id="redisNode3" class="org.springframework.data.redis.connection.RedisNode">
+		<constructor-arg value="${redisNode3.host}" />
+		<constructor-arg value="${redisNode3.port}" />
+	</bean>
+	<bean id="redisNode4" class="org.springframework.data.redis.connection.RedisNode">
+		<constructor-arg value="${redisNode4.host}" />
+		<constructor-arg value="${redisNode4.port}" />
+	</bean>
+	<bean id="redisNode5" class="org.springframework.data.redis.connection.RedisNode">
+		<constructor-arg value="${redisNode5.host}" />
+		<constructor-arg value="${redisNode5.port}" />
+	</bean>
+	<bean id="redisNode6" class="org.springframework.data.redis.connection.RedisNode">
+		<constructor-arg value="${redisNode6.host}" />
+		<constructor-arg value="${redisNode6.port}" />
+	</bean>
+
+	<!--setter方式注入 -->
+	<bean id="redisClusterConfiguration"
+		class="org.springframework.data.redis.connection.RedisClusterConfiguration">
+		<property name="clusterNodes">
+			<set>
+				<ref bean="redisNode1" />
+				<ref bean="redisNode2" />
+				<ref bean="redisNode3" />
+				<ref bean="redisNode4" />
+				<ref bean="redisNode5" />
+				<ref bean="redisNode6" />
+			</set>
+		</property>
+		<property name="maxRedirects" value="5" />
+	</bean>
+
+	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<!-- 当连接池资源耗尽时，调用者最大阻塞的时间，超时将跑出异常。单位，毫秒数;默认为-1.表示永不超时。高版本：maxWaitMillis，低版本：maxWait -->
+		<property name="maxWaitMillis" value="-1" />
+		<property name="maxTotal" value="10000" />
+		<property name="minIdle" value="500" />
+		<property name="maxIdle" value="10000" />
+		<!--对拿到的connection进行validateObject校验 -->
+		<property name="testOnBorrow" value="true" />
+		<!--在进行returnObject对返回的connection进行validateObject校验 -->
+		<property name="testOnReturn" value="true" />
+		<!--定时对线程池中空闲的链接进行validateObject校验 -->
+		<property name="testWhileIdle" value="true" />
+	</bean>
+
+	<bean id="jedisConnFactory"
+		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+		<constructor-arg ref="redisClusterConfiguration" />
+		<constructor-arg ref="jedisPoolConfig" />
+		<property name="usePool" value="true"/>
+		<!-- <property name="timeout" value="5000"/> -->
+		<!-- <property name="password" value="${redis.cluster.jedisConnectionFactory.password}" /> -->
+	</bean>
+
+	<!-- 缓存key生成规则器 -->
+	<bean id="cacheKeyGenerator" class="com.ssm.cache.utils.CacheKeyGenerator" />
+
+	<!-- redis序列化 -->
+	<bean id="jacksonSerializer"
+		class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer" />
+
+	<!-- redis template definition -->
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+		<property name="connectionFactory" ref="jedisConnFactory" />
+		<property name="defaultSerializer" ref="jacksonSerializer" />
+	</bean>
+
+	<bean id="cacheManager" class="org.springframework.data.redis.cache.RedisCacheManager">
+		<constructor-arg name="redisOperations" ref="redisTemplate" />
+		<!-- 是否事务提交，如果事务回滚，缓存也回滚，默认false -->
+		<property name="transactionAware" value="true" />
+		<!-- 默认有效期1d 3600*24 -->
+		<property name="defaultExpiration" value="86400" />
+		<!-- <property name="loadRemoteCachesOnStartup" value="true" /> -->
+	</bean>
+</beans>
