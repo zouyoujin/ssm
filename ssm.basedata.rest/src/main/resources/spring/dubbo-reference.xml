@@ -11,14 +11,11 @@
 	http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd 
 	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd ">
-
-	<context:property-placeholder location="classpath*:config/*.properties" ignore-resource-not-found="true" ignore-unresolvable="true" />
 	
-	<context:component-scan base-package="com.ssm.datasource,com.ssm.basedata" />
+	<!-- 生成远程服务代理，可以和本地bean一样使用 -->
+	<dubbo:consumer timeout="${zookeeper.consumer.timeout}"></dubbo:consumer>
 	
-	<import resource="classpath:/spring/dubbo-provider.xml"/>
+	<!-- 要引用的服务 -->
+	<dubbo:reference id="userServiceImpl" interface="com.ssm.basedata.service.UserService" check="false" />
 	
-	<import resource="classpath:/spring/dubbo-reference.xml"/>
-	
-	<import resource="classpath*:spring/spring-*.xml"/>
 </beans>

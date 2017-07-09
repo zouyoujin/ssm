@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebApp_ID" version="3.0">
+	<display-name>ssm.basedata.rest</display-name>
+
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			classpath*:applicationContext.xml,
+			classpath*:spring/spring-*.xml
+		</param-value>
+	</context-param>
+
+	<listener>
+		<listener-class>com.alibaba.dubbo.remoting.http.servlet.BootstrapListener</listener-class>
+	</listener>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<servlet>
+		<servlet-name>dispatcher</servlet-name>
+		<servlet-class>com.alibaba.dubbo.remoting.http.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>dispatcher</servlet-name>
+		<url-pattern>/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- <context-param> <param-name>resteasy.providers</param-name> <param-value> 
+		com.yyc.portal.interceptor.AuthorizationInterceptor, com.yyc.portal.interceptor.LoggerInterceptor 
+		</param-value> </context-param> resteasy启动初始化监听器 <listener> <listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class> 
+		</listener> resteasy和spring整合，有了这个，ContextLoaderListener就不要了 <listener> <listener-class>org.jboss.resteasy.plugins.spring.SpringContextLoaderListener</listener-class> 
+		</listener> <servlet> <servlet-name>resteasy-servlet</servlet-name> <servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class> 
+		</servlet> <servlet-mapping> <servlet-name>resteasy-servlet</servlet-name> 
+		<url-pattern>/*</url-pattern> </servlet-mapping> -->
+
+	<welcome-file-list>
+		<!-- <welcome-file>index.html</welcome-file> -->
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+</web-app>

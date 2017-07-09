@@ -2,6 +2,8 @@ package com.ssm.basedata.business.user.impl;
 
 import java.util.Date;
 
+import javax.annotation.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,16 +30,16 @@ public class UserBusinessImpl extends BaseBusinessImpl<User, Long> implements Us
 
 	private static final Logger logger = LoggerFactory.getLogger(UserBusinessImpl.class);
 
-	@Autowired
+	@Resource
 	private UserMapper userMapper;
-
+	
 	@Autowired
 	public void setBaseMapper(UserMapper userMapper) {
 		super.setBaseMapper(userMapper);
 	}
 
-	@Transactional(readOnly = false)
-	@Cacheable("users")
+	@Transactional(readOnly = true)
+	@Cacheable(cacheNames="users",keyGenerator="cacheKeyGenerator")
 	@Override
 	public User getUserById(Long id) {
 		logger.info("database getUserById id = " + id);

@@ -4,19 +4,15 @@
 	
 	<resultMap id="BaseResultMap" type="com.ssm.common.model.User">
 		<id column="id" jdbcType="BIGINT" property="id" />
-		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="username" jdbcType="VARCHAR" property="username" />
 		<result column="password" jdbcType="VARCHAR" property="password" />
 		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
 		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
 	</resultMap>
 	
-	<insert id="insert" parameterType="com.ssm.common.model.User">
-		<selectKey order="AFTER" keyProperty="id" resultType="java.lang.Long">
-			SELECT currval('tbl_user_sequence')
-		</selectKey>
-		insert into tbl_user (id,username,password,create_time,update_time)
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.ssm.common.model.User">
+		insert into tbl_users (username,password,create_time,update_time)
 		values (
-			nextVal('tbl_user_sequence'),
 			#{username,jdbcType=VARCHAR},
 			#{password,jdbcType=VARCHAR},
 			#{createTime,jdbcType=TIMESTAMP},
@@ -25,16 +21,16 @@
 	</insert>
 	
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-		delete from tbl_user
+		delete from tbl_users
 		where id = #{id,jdbcType=BIGINT}
 	</delete>
 	
 	<!-- 用户自定义SQL文件部分开始 -->
 	<insert id="batchInsertRecord" parameterType="java.util.List">  
-	    insert into tbl_user (id,username,password,create_time,update_time)
+	    insert into tbl_users (id,username,password,create_time,update_time)
 		values
 	    <foreach collection="list" index="index" item="item" separator=",">
-			nextVal('tbl_user_sequence'),
+			nextVal('tbl_users_sequence'),
 			#{username,jdbcType=VARCHAR},
 			#{password,jdbcType=VARCHAR},
 			#{createTime,jdbcType=TIMESTAMP},
@@ -44,7 +40,7 @@
 	
 	<update id="batchUpdateRecord" parameterType="java.util.List">
 		<foreach close="" collection="list" index="index" item="item" open="" separator=";">
-			update tbl_user
+			update tbl_users
 			set username = #{item.username,jdbcType=VARCHAR},
 			password = #{item.password,jdbcType=VARCHAR},
 			update_time = #{item.updateTime,jdbcType=TIMESTAMP}
@@ -53,12 +49,12 @@
 	</update>
 	
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap">
-		select t.id,t.username,t.password,t.create_time,t.update_time from tbl_user t
+		select t.id,t.username,t.password,t.create_time,t.update_time from tbl_users t
 		where t.id = #{item.id,jdbcType=BIGINT}
 	</select>
 		
 	<select id="selectAll" resultMap="BaseResultMap">
-		select t.id,t.username,t.password,t.create_time,t.update_time from tbl_user t
+		select t.id,t.username,t.password,t.create_time,t.update_time from tbl_users t
 	</select>
 	
 	<!-- 通用查询方法 -->

@@ -2,12 +2,15 @@ CREATE DATABASE basedata;
 USE basedata;
 
 -- ----------------------------
--- tbl_users
+-- Table structure for tbl_users
 -- ----------------------------
 DROP TABLE IF EXISTS `tbl_users`;
-CREATE TABLE `alarm_settings` (
-  `id` int(11) NOT NULL auto_increment,
-  `username` varchar(80) NOT NULL,
-  `password` varchar(50) NOT NULL
-  PRIMARY KEY  (`users_id`)
-) ENGINE=InnoDB;
+CREATE TABLE `tbl_users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户ID主键',
+  `username` varchar(120) NOT NULL COMMENT '用户名称',
+  `password` varchar(60) NOT NULL COMMENT '用户密码',
+  `create_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '用户创建时间',
+  `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '用户更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
+

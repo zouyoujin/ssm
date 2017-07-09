@@ -31,5 +31,10 @@
 			<artifactId>ssm.datasource</artifactId>
 			<version>${ssm.common.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.zyj.ssm</groupId>
+			<artifactId>ssm.cache</artifactId>
+			<version>${ssm.common.version}</version>
+		</dependency>
 	</dependencies>
 </project>
