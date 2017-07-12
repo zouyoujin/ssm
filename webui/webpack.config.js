@@ -31,7 +31,7 @@ var plugins = [
 // 全局性依赖，手动配置
 var globalEntrys = function (entrys) {
 	entrys = entrys || {};
-	entrys['commonlib'] = ['react', 'react-dom', 'react-router', 'react-redux'];
+	entrys['commonlib'] = ['react', 'react-dom', 'redux','react-redux', 'react-router'];
 	plugins.push(new CommonsChunkPlugin({ // 注意顺序,被依赖的要放到数组后边
 		name: ['commonlib'],
 		minChunks: Infinity
@@ -42,7 +42,7 @@ var globalEntrys = function (entrys) {
 // 具体页面
 var pageEntrys = function (entrys) {
 	entrys = entrys || {};
-	entrys['App'] = __dirname + '/src/main/resources/js/pages/App.tsx';
+	entrys['App'] = __dirname + '/src/main/resources/js/pages/App.jsx';
 	return entrys;
 };
 
@@ -55,9 +55,9 @@ var entrys = function () {
 
 var loaders = [
 	{
-		test: /\.(js|jsx|tsx|ts)?$/,
-		//loaders: ['babel', 'ts-loader'],
-		loaders: ['react-hot', 'babel-loader', 'ts-loader'],
+		test: /\.(js|jsx)?$/,
+		//loaders: ['babel'],
+		loaders: ['react-hot', 'babel-loader'],
 		exclude: /node_modules/
 	},
 	{
@@ -98,7 +98,7 @@ module.exports = {
 	resolve: {
 		root: [path.join(__dirname, 'src/main/resources'), path.join(__dirname, 'node_modules')],
 		// 自动扩展文件后缀名，意味着我们require模块可以省略不写后缀名
-		extensions: ['', '.js', '.jsx', '.ts', '.tsx', '.less'],
+		extensions: ['', '.js', '.jsx', '.less'],
 		// 模块别名定义，方便后续直接引用别名，无须多写长长的地址
 		alias: {
 			root: path.resolve(''),

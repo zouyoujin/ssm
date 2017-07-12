@@ -25,3 +25,7 @@ npm install @types/node @types/react @types/react-dom --save
 npm install @types/object-assign --save
 --typings install dt~jquery --global
 --typings install dt~jquery --save
+
+安装依赖包之后需要更新下antd的版本解决打包告警的问题
+cnpm install
+cnpm install antd@2.8.3 --save
