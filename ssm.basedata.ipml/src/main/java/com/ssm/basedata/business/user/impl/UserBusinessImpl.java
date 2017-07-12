@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,20 +33,22 @@ public class UserBusinessImpl extends BaseBusinessImpl<User, Long> implements Us
 
 	@Resource
 	private UserMapper userMapper;
-	
+
 	@Autowired
 	public void setBaseMapper(UserMapper userMapper) {
 		super.setBaseMapper(userMapper);
 	}
 
-	@Transactional(readOnly = true)
-	@Cacheable(cacheNames="users",keyGenerator="cacheKeyGenerator")
+	@Cacheable(cacheNames = "users", keyGenerator = "cacheKeyGenerator")
+	@Transactional(transactionManager = "transactionManager", readOnly = true)
 	@Override
 	public User getUserById(Long id) {
 		logger.info("database getUserById id = " + id);
 		return userMapper.selectByPrimaryKey(id);
 	}
 
+	//@CachePut(cacheNames = "users", key = "#userTO.getId()")
+	@Transactional(transactionManager = "transactionManager", rollbackFor = { Exception.class })
 	@Override
 	public User registerUser(UserTO userTO) {
 		User user = new User(userTO);

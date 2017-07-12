@@ -59,6 +59,6 @@ public class CacheKeyGenerator implements KeyGenerator {
 		String finalKey = key.toString();
 		long cacheKeyHash = Hashing.murmur3_128().hashString(finalKey, Charset.defaultCharset()).asLong();
 		logger.debug("using cache key={} hashCode={}", finalKey, cacheKeyHash);
-		return key.toString();
+		return finalKey + cacheKeyHash;
 	}
 }

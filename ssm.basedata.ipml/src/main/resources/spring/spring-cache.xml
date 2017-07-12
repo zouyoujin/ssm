@@ -75,9 +75,10 @@
 		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
 		<constructor-arg ref="redisClusterConfiguration" />
 		<constructor-arg ref="jedisPoolConfig" />
-		<property name="usePool" value="true"/>
+		<property name="usePool" value="true" />
 		<!-- <property name="timeout" value="5000"/> -->
-		<!-- <property name="password" value="${redis.cluster.jedisConnectionFactory.password}" /> -->
+		<!-- <property name="password" value="${redis.cluster.jedisConnectionFactory.password}" 
+			/> -->
 	</bean>
 
 	<!-- 缓存key生成规则器 -->
@@ -87,10 +88,14 @@
 	<bean id="jacksonSerializer"
 		class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer" />
 
+	<bean id="stringSerializer"
+		class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+
 	<!-- redis template definition -->
 	<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
 		<property name="connectionFactory" ref="jedisConnFactory" />
 		<property name="defaultSerializer" ref="jacksonSerializer" />
+		<property name="keySerializer" ref="stringSerializer" />
 	</bean>
 
 	<bean id="cacheManager" class="org.springframework.data.redis.cache.RedisCacheManager">
