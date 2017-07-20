@@ -17,7 +17,7 @@ var plugins = [
 			verbose: true,
 			//将log写到 console.
 			dry: false,
-			exclude: ['WEB-INF', 'index.jsp'] //排除不删除的目录，主要用于避免删除公用的文件
+			exclude: ['WEB-INF', 'index.jsp','favicon.ico'] //排除不删除的目录，主要用于避免删除公用的文件
 		}),
 	new webpack.optimize.UglifyJsPlugin({
 		comments: false,        //去掉注释
