@@ -1,98 +1,77 @@
-import React, { PropTypes } from 'react';
-import { Input, Button, Row, Col, Form, message } from 'antd';
-import { bindActionCreators } from 'redux';
+import React from 'react';
+import { Form, Icon, Input, Button, Checkbox, message } from 'antd';
 
-// 加载其它组件
-import action from '../../utils/action';
 import './loginPage.less';
 //定义常量列表
 const FormItem = Form.Item;
 
 //Message Setting
-message.config({ top: 100 });
+message.config({ top: 100, duration: 2 });
 
 // 构建界面
 class LoginPage extends React.Component {
 
-    static propTypes = {
-        match: PropTypes.object.isRequired,
-        location: PropTypes.object.isRequired,
-        history: PropTypes.object.isRequired
-    };
-
-    constructor(props, context) {
-        super(props, context);
-    };
-
-    componentWillReceiveProps(nextProps) {
-        const error = nextProps.loginErrors;
-        const isLoggingIn = nextProps.loggingIn;
-        const user = nextProps.user;
-        if (error != this.props.loginErrors && error) {
-            message.error('Please check your account or password');
-        }
-        if (!isLoggingIn && !error && user) {
-            message.success('Login successfully');
-        }
-        if (user) {
-            this.props.history.push("/home");
-        }
-    };
+    constructor(props) {
+        super(props);
+    }
 
     handleSubmit(e) {
         e.preventDefault();
-        const data = this.props.form.getFieldsValue();
-        let dataObj = {
-            type: "USER_LOGIN",
-            url: "/user/login",
-            data: data
-        }
-        this.props.api.postData(dataObj);
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                console.log('Received values of form: ', values);
+                message.success("loading......");
+            } else {
+                message.error("请输入正确的用户名和密码!");
+            }
+        });
     };
 
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <Row className="login-row" type="flex" justify="space-around" align="middle">
-                <Col span={8}>
-                    <div className="login-form">
-                        <Form layout="horizontal" onSubmit={this.handleSubmit.bind(this)}>
-                            <FormItem label="User:" labelCol={{ span: 6 }} wrapperCol={{ span: 14 }}>
-                                {getFieldDecorator("user", { initialValue: '' })(
-                                    <Input id="account" placeholder='Please input your account' />
-                                )}
-                            </FormItem>
-                            <FormItem label="Password:" labelCol={{ span: 6 }} wrapperCol={{ span: 14 }}>
-                                {getFieldDecorator("password", { initialValue: '' })(
-                                    <Input type='password' id="password" placeholder='Please input your password' />
-                                )}
-                            </FormItem>
-                            <Row><Col span={24} offset={10}>
-                                <Button type='primary' htmlType='submit'>Login</Button>
-                            </Col></Row>
-                        </Form>
+            <div className="login">
+                <div className="login-form" >
+                    <div className="login-logo">
+                        <span>React Admin</span>
                     </div>
-                </Col>
-            </Row>
+                    <Form onSubmit={this.handleSubmit.bind(this)} style={{ maxWidth: '300px' }}>
+                        <FormItem>
+                            {getFieldDecorator("userName", {
+                                rules: [{ required: true, message: '请输入用户名!' }],
+                            })(
+                                <Input id="userName" prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="用户名" />
+                                )}
+                        </FormItem>
+                        <FormItem>
+                            {getFieldDecorator('password', {
+                                rules: [{ required: true, message: '请输入密码!' }],
+                            })(
+                                <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="密码" />
+                                )}
+                        </FormItem>
+                        <FormItem>
+                            {getFieldDecorator('remember', {
+                                valuePropName: 'checked',
+                                initialValue: true,
+                            })(
+                                <Checkbox>记住我</Checkbox>
+                                )}
+                            <a className="login-form-forgot" href="" style={{ float: 'right' }}>忘记密码</a>
+                            <Button type="primary" htmlType="submit" className="login-form-button" style={{ width: '100%' }}>
+                                登录
+                        </Button>
+                            或 <a href="">现在就去注册!</a>
+                            <p>
+                                <Icon type="github" onClick={this.gitHub} />(第三方登录)
+                            </p>
+                        </FormItem>
+                    </Form>
+                </div>
+            </div>
         )
     };
 }
 
-const LoginPageForm = Form.create()(LoginPage);
-
-function mapStateToProps(state) {
-    const { user } = state;
-    if (user.user) {
-        return { user: user.user, loggingIn: user.loggingIn, loginErrors: '' };
-    }
-    return { user: null, loggingIn: user.loggingIn, loginErrors: user.loginErrors };
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        api: bindActionCreators(action, dispatch)
-    }
-}
-
-export default LoginPageForm;
+export default Form.create()(LoginPage);
 

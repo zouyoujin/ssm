@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "server": "cd server && json-server db.json -w -p 3000",
-    "start": "webpack-dev-server --history-api-fallback --hot --inline --process --colors --port 8000",
-    "dev": "webpack -p --progress --colors  --w --display-error-details",
-    "build": "webpack  --progress --colors --config webpack.production.config.js"
+    "start" : "webpack-dev-server --define process.env.NODE_ENV='\"production\"' --history-api-fallback --hot --inline --process --colors --port 8000",
+    "dev"   : "webpack -p --progress --colors  --w --display-error-details",
+    "prod"  : "webpack -p --define process.env.NODE_ENV='\"production\"' --progress --colors --config webpack.product.config.js --display-error-details"
   },
   "author": "zyj",
   "license": "ISC",
@@ -54,6 +54,7 @@
     "url-loader": "^0.5.8"
   },
   "devDependencies": {
+    "cross-env": "^5.0.1",
     "webpack": "^1.13.3",
     "webpack-dev-server": "^1.16.2"
   }

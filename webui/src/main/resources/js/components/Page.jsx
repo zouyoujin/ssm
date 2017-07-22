@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './../../css/App.less';
+
 class Page extends React.Component {
     render() {
         return (
@@ -7,7 +9,6 @@ class Page extends React.Component {
                 {this.props.children}
             </div>
         )
-
     }
 }
 

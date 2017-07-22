@@ -1,52 +1,43 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-import { Menu, Icon } from 'antd';
+import { Layout, Menu, Breadcrumb, Icon } from 'antd';
+
+const { SubMenu } = Menu;
+const { Header, Content, Footer, Sider } = Layout;
+
+import SiderCustom from './SiderCustom';
+import HeaderCustom from './HeaderCustom';
 
 import homeLayoutStyle from '../../../css/home-layout';
 
-const SubMenu = Menu.SubMenu;
-const MenuItem = Menu.Item;
-
+/**
+ * 主页面布局
+ */
 class HomeLayout extends Component {
 
+  state = {
+    collapsed: false,
+  };
+
+  onCollapse = (collapsed) => {
+    console.log(collapsed);
+    this.setState({ collapsed });
+  }
+
   render() {
-
-    const { children } = this.props;
-
     return (
-      <div>
-        <header className="header">
-          <Link to="/">ReactManager</Link>
-        </header>
-
-        <main className="main">
-          <div className="menu">
-            <Menu mode="inline" theme="dark" style={{ width: '240px' }}>
-              <SubMenu key="user" title={<span><Icon type="user" /><span>用户管理</span></span>}>
-                <MenuItem key="user-list">
-                  <Link to="/user/list">用户列表</Link>
-                </MenuItem>
-                <MenuItem key="user-add">
-                  <Link to="/user/add">添加用户</Link>
-                </MenuItem>
-              </SubMenu>
-
-              <SubMenu key="book" title={<span><Icon type="book" /><span>图书管理</span></span>}>
-                <MenuItem key="book-list">
-                  <Link to="/book/list">图书列表</Link>
-                </MenuItem>
-                <MenuItem key="book-add">
-                  <Link to="/book/add">添加图书</Link>
-                </MenuItem>
-              </SubMenu>
-            </Menu>
-          </div>
-
-          <div className="content">
-            {children}
-          </div>
-        </main>
-      </div>
+      <Layout className="ant-layout-has-sider">
+        <SiderCustom path={this.props.location.pathname} collapsed={this.state.collapsed} />
+        <Layout>
+          <HeaderCustom toggle={this.toggle} />
+          <Content style={{ margin: '0 16px', overflow: 'initial' }}>
+            {this.props.children}
+          </Content>
+          <Footer style={{ textAlign: 'center' }}>
+            React-Admin ©2017 Created by 865470087@qq.com
+          </Footer>
+        </Layout>
+      </Layout>
     );
   }
 }
