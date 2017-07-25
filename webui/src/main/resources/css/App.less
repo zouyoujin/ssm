@@ -4,7 +4,52 @@ html, body, div, h5, h6, p, ul, li {
 }
 
 #app {
-    height: 100%;
+    position: relative;
+    height: 100vh;
+    .ant-layout-header{
+        height: 48px;
+        line-height: 48px;
+    }
+    //左边菜单收起来的样式
+    .ant-layout-sider-collapsed{
+        .nav-text{
+            display:none;
+        }
+    }
+    .theme-light{
+        .ant-layout-sider{
+            background: #fff;
+            transition: all 0.3s ease-out;
+            box-shadow: 4px 4px 20px 0 rgba(0, 0, 0, 0.01);
+            color: #999;
+        }
+        .switchtheme{
+            background: #fff;
+            border-top: solid 1px #e8e8e8;
+        }
+    }
+    .switchtheme{
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        height: 48px;
+        background-color: #494949;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        padding: 0 16px 0 24px;
+        overflow: hidden;
+        z-index: 1000;
+        .switchthemeTitle{
+            color: #999;
+        }
+    }
     /* 左侧导航固定宽度 */
     #leftMenu {
         position: absolute;
@@ -15,7 +60,41 @@ html, body, div, h5, h6, p, ul, li {
         width: 200px;
         box-sizing: border-box;
     }
-
+    .avatar {
+        position: relative;
+        display: inline-block;
+        width: 40px;
+        line-height: 1;
+        border-radius: 500px;
+        white-space: nowrap;
+        font-weight: bold;
+        i {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 10px;
+            height: 10px;
+            margin: 1px;
+            border-width: 2px;
+            border-style: solid;
+            border-radius: 100%;
+            &.bottom {
+                left: auto;
+                top: auto;
+                bottom: 0;
+                right: 0;
+            }
+            &.on {
+                background-color: #6cc788;
+            }
+        }
+        img {
+            border-radius: 500px;
+            width: 100%;
+            vertical-align: middle;
+            margin-top: -5px;
+        }
+    }
     /* logo样式 */
     #logo {
         display: block;

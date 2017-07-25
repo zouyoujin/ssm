@@ -8,7 +8,7 @@ import { Router, Route, Link, hashHistory, IndexRoute, Redirect, browserHistory,
 import Page from './../components/Page';
 import HomeLayout from './layouts/HomeLayout';
 import LoginPage from './login/LoginPage';
-import HomePage from './HomePage';
+import WelcomePage from './../components/welcome/WelcomePage';
 import UserAddPage from './user/UserAddPage';
 
 //配置路由
@@ -18,7 +18,7 @@ render(
             <IndexRedirect to="/home" />
             <Route path="/login" component={LoginPage} />
             <Route component={HomeLayout}>
-                <Route path="/home" component={HomePage} />
+                <Route path="/home" component={WelcomePage} />
                 <Route path="/user/add" component={UserAddPage} />
             </Route>
         </Route>

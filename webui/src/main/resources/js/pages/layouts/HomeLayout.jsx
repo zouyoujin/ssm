@@ -17,17 +17,33 @@ class HomeLayout extends Component {
 
   state = {
     collapsed: false,
+    darkTheme: 'dark',
   };
 
-  onCollapse = (collapsed) => {
-    console.log(collapsed);
-    this.setState({ collapsed });
-  }
+  toggle = () => {
+    //console.log("====================toggle===============");
+    this.setState({
+      collapsed: !this.state.collapsed,
+    });
+  };
+
+  /**
+ * 修改主题样式功能
+ */
+  changeTheme = () => {
+    var darkTheme = 'dark';
+    if (this.state.darkTheme == 'dark') {
+      darkTheme = 'light';
+    }
+    this.setState({
+      darkTheme: darkTheme,
+    })
+  };
 
   render() {
     return (
-      <Layout className="ant-layout-has-sider">
-        <SiderCustom path={this.props.location.pathname} collapsed={this.state.collapsed} />
+      <Layout className={"ant-layout-has-sider layoutMain " +"theme-"+this.state.darkTheme}>
+        <SiderCustom path={this.props.location.pathname} collapsed={this.state.collapsed} changeTheme={this.changeTheme} darkTheme={this.state.darkTheme} />
         <Layout>
           <HeaderCustom toggle={this.toggle} />
           <Content style={{ margin: '0 16px', overflow: 'initial' }}>

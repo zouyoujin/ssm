@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import { Layout, Menu, Icon } from 'antd';
+import { Layout, Menu, Icon, Switch } from 'antd';
 import { Link } from 'react-router';
+import logo from '../../../images/logo.png';
 const { Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 
 class SiderCustom extends Component {
-    
+
     state = {
         collapsed: false,
+        darkTheme: 'dark',
         mode: 'inline',
         openKey: '',
         selectedKey: ''
@@ -34,6 +36,12 @@ class SiderCustom extends Component {
         });
     };
 
+    toggle = () => {
+        this.setState({
+            collapsed: !this.state.collapsed,
+        });
+    }
+
     menuClick = e => {
         this.setState({
             selectedKey: e.key
@@ -48,32 +56,32 @@ class SiderCustom extends Component {
             openKey: v[v.length - 1]
         })
     };
-    
+
     render() {
         return (
             <Sider
                 trigger={null}
-                breakpoint="lg"
-                collapsed={this.props.collapsed}
-                style={{ overflowY: 'auto' }}
+                collapsible
+                collapsed={this.state.collapsed}
             >
-                <div className="logo" />
+                <div className="logoWrap"><img alt="logo" src={logo} /><span>AntD Admin</span></div>
                 <Menu
                     onClick={this.menuClick}
-                    theme="dark"
+                    theme={this.props.darkTheme}
                     mode={this.state.mode}
                     selectedKeys={[this.state.selectedKey]}
                     openKeys={[this.state.openKey]}
                     onOpenChange={this.openMenu}
                 >
-                    <Menu.Item key="/app/dashboard/index">
-                        <Link to={'/app/dashboard/index'}><Icon type="mobile" /><span className="nav-text">首页</span></Link>
+                    <Menu.Item key="/home">
+                        <Link to={'/home'}>
+                            <Icon type="mobile" /><span className="nav-text">首页</span>
+                        </Link>
                     </Menu.Item>
                     <SubMenu
                         key="/app/ui"
                         title={<span><Icon type="scan" /><span className="nav-text">UI</span></span>}
                     >
-
                         <Menu.Item key="/app/ui/buttons"><Link to={'/app/ui/buttons'}>按钮</Link></Menu.Item>
                         <Menu.Item key="/app/ui/icons"><Link to={'/app/ui/icons'}>图标</Link></Menu.Item>
                         <Menu.Item key="/app/ui/spins"><Link to={'/app/ui/spins'}>加载中</Link></Menu.Item>
@@ -124,6 +132,10 @@ class SiderCustom extends Component {
                         <Menu.Item key="/404"><Link to={'/404'}>404</Link></Menu.Item>
                     </SubMenu>
                 </Menu>
+                {!this.state.collapsed ? <div className="switchtheme">
+                    <span className="switchthemeTitle"><Icon type="bulb" />Switch Theme</span>
+                    <Switch onChange={this.props.changeTheme} defaultChecked={this.props.darkTheme} checkedChildren="Dark" unCheckedChildren="Light" />
+                </div> : ''}
                 <style>
                     {`
                     #nprogress .spinner{
