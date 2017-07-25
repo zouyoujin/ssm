@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "server": "cd server && json-server db.json -w -p 3000",
-    "start" : "webpack-dev-server --define process.env.NODE_ENV='\"production\"' --history-api-fallback --hot --inline --process --colors --port 8000",
+    "start" : "webpack-dev-server --define process.env.NODE_ENV='\"production\"' --history-api-fallback --hot --inline --progress --colors --port 8000",
     "dev"   : "webpack -p --progress --colors  --w --display-error-details",
     "prod"  : "webpack -p --define process.env.NODE_ENV='\"production\"' --progress --colors --config webpack.product.config.js --display-error-details"
   },
