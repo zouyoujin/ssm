@@ -25,5 +25,5 @@ public interface UserService {
 	 * @param userTO
 	 * @return
 	 */
-	public User registerUser(UserTO userTO);
+	public User registerUser(UserTO userTO) throws BusinessException;
 }

@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public User registerUser(UserTO userTO) {
+	public User registerUser(UserTO userTO) throws BusinessException{
 		if (userTO == null) {
 			logger.error("registerUser,but userTO is null.");
 			throw new BusinessException("registerUser,but userTO is null.");

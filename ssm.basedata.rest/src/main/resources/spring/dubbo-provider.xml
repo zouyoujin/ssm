@@ -2,10 +2,10 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
 	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
-	<dubbo:application name="basedataREST"/>
+	<dubbo:application name="basedataprovider"/>
 
 	<dubbo:registry protocol="zookeeper" address="${zookeeper.address}" timeout="${zookeeper.timeout}" />
 
@@ -14,7 +14,7 @@
 
     <!-- here we demonstrate both annotation-based and xml-based configs -->
     <dubbo:annotation package="com.ssm.basedata.rest" />
-
+	
 	<!-- use the external tomcat or other server with the servlet approach; 
 		the port and contextpath must be exactly the same as those in external server -->
 	<dubbo:protocol name="rest" port="${dubbo.basedatarest.port}" contextpath="${dubbo.basedatarest.contextpath}" server="servlet" />
