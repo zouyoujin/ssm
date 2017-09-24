@@ -5,6 +5,7 @@ import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -18,7 +19,6 @@ import com.ssm.basedata.rest.UserServiceRest;
 import com.ssm.basedata.service.UserService;
 import com.ssm.common.constant.ErrorCode;
 import com.ssm.common.model.User;
-import com.ssm.common.pojo.RegistUserResult;
 import com.ssm.common.pojo.ResponseService;
 import com.ssm.common.pojo.UserTO;
 
@@ -58,17 +58,32 @@ public class UserServiceRestImpl implements UserServiceRest {
 
 	@POST
 	@Path("register")
-	public ResponseService<RegistUserResult> registerUser(UserTO userTO) {
-		ResponseService<RegistUserResult> response = new ResponseService<RegistUserResult>();
+	public ResponseService<Long> registerUser(UserTO userTO) {
+		ResponseService<Long> response = new ResponseService<Long>();
 		try {
 			User user = userService.registerUser(userTO);
-			response.setData(new RegistUserResult(user.getId()));
+			response.setData(user.getId());
 		} catch (Exception e) {
 			response.setStatus(ErrorCode.USER_REGISTER_EXCEPTION);
 			response.setMessage("UserRestServiceImpl=>registerUser exception userTO =[" + userTO.toString() + "]");
 			logger.error(
 					"UserRestServiceImpl=>registerUser exception userTO =[" + userTO.toString() + "]" + e.getMessage(),
 					e);
+		}
+		return response;
+	}
+
+	@PUT
+	@Path("clear")
+	@Override
+	public ResponseService<Boolean> clearAllCache() {
+		ResponseService<Boolean> response = new ResponseService<Boolean>();
+		try {
+			response.setData(userService.clearAllCache());
+		} catch (Exception e) {
+			response.setStatus(ErrorCode.USER_CLEARCACHE_EXCEPTION);
+			response.setMessage("UserRestServiceImpl=>clear users cache exception");
+			logger.error("UserRestServiceImpl=>clear users cache exception" + e.getMessage(), e);
 		}
 		return response;
 	}

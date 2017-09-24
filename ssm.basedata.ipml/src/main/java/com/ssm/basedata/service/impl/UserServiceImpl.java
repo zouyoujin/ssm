@@ -82,4 +82,9 @@ public class UserServiceImpl implements UserService{
 		return user;
 	}
 
+	@Override
+	public Boolean clearAllCache() throws BusinessException {
+		return userBusiness.clearAllCache();
+	}
+
 }

@@ -26,4 +26,11 @@ public interface UserService {
 	 * @return
 	 */
 	public User registerUser(UserTO userTO) throws BusinessException;
+	
+	/**
+	 * 清空用户相关缓存信息
+	 * @param userTO
+	 * @return 成功:true 失败:false
+	 */
+	public Boolean clearAllCache() throws BusinessException;
 }

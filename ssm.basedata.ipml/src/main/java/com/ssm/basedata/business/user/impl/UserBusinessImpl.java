@@ -1,12 +1,11 @@
 package com.ssm.basedata.business.user.impl;
 
-import java.util.Date;
-
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -47,15 +46,19 @@ public class UserBusinessImpl extends BaseBusinessImpl<User, Long> implements Us
 		return userMapper.selectByPrimaryKey(id);
 	}
 
-	//@CachePut(cacheNames = "users", key = "#userTO.getId()")
+	@CachePut(cacheNames = "users", key = "#userTO.getUsername()")
 	@Transactional(transactionManager = "transactionManager", rollbackFor = { Exception.class })
 	@Override
 	public User registerUser(UserTO userTO) {
 		User user = new User(userTO);
-		Date now = new Date();
-		user.setCreateTime(now);
-		user.setUpdateTime(now);
 		userMapper.insert(user);
 		return user;
+	}
+
+	// 清空users缓存
+	@CacheEvict(value = "users", allEntries = true)
+	@Override
+	public Boolean clearAllCache() {
+		return true;
 	}
 }

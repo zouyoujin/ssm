@@ -6,15 +6,19 @@
 		<id column="id" jdbcType="BIGINT" property="id" />
 		<result column="username" jdbcType="VARCHAR" property="username" />
 		<result column="password" jdbcType="VARCHAR" property="password" />
+		<result column="phone" jdbcType="VARCHAR" property="phone" />
+		<result column="email" jdbcType="VARCHAR" property="email" />
 		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
 		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
 	</resultMap>
 	
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.ssm.common.model.User">
-		insert into tbl_users (username,password,create_time,update_time)
+		insert into tbl_users (username,password,phone,email,create_time,update_time)
 		values (
 			#{username,jdbcType=VARCHAR},
 			#{password,jdbcType=VARCHAR},
+			#{phone,jdbcType=VARCHAR},
+			#{email,jdbcType=VARCHAR},
 			#{createTime,jdbcType=TIMESTAMP},
 			#{updateTime,jdbcType=TIMESTAMP}
 		)
@@ -27,12 +31,14 @@
 	
 	<!-- 用户自定义SQL文件部分开始 -->
 	<insert id="batchInsertRecord" parameterType="java.util.List">  
-	    insert into tbl_users (id,username,password,create_time,update_time)
+	    insert into tbl_users (username,password,phone,email,create_time,update_time)
 		values
 	    <foreach collection="list" index="index" item="item" separator=",">
 			nextVal('tbl_users_sequence'),
 			#{username,jdbcType=VARCHAR},
 			#{password,jdbcType=VARCHAR},
+			#{phone,jdbcType=VARCHAR},
+			#{email,jdbcType=VARCHAR},
 			#{createTime,jdbcType=TIMESTAMP},
 			#{updateTime,jdbcType=TIMESTAMP}
 	    </foreach>  
@@ -43,18 +49,20 @@
 			update tbl_users
 			set username = #{item.username,jdbcType=VARCHAR},
 			password = #{item.password,jdbcType=VARCHAR},
+			phone = #{item.phone,jdbcType=VARCHAR},
+			email = #{item.email,jdbcType=VARCHAR},
 			update_time = #{item.updateTime,jdbcType=TIMESTAMP}
 			where id = #{item.id,jdbcType=BIGINT}
 		</foreach>
 	</update>
 	
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap">
-		select t.id,t.username,t.password,t.create_time,t.update_time from tbl_users t
+		select t.id,t.username,t.password,t.phone,t.email,t.create_time,t.update_time from tbl_users t
 		where t.id = #{item.id,jdbcType=BIGINT}
 	</select>
 		
 	<select id="selectAll" resultMap="BaseResultMap">
-		select t.id,t.username,t.password,t.create_time,t.update_time from tbl_users t
+		select t.id,t.username,t.password,t.phone,t.email,t.create_time,t.update_time from tbl_users t
 	</select>
 	
 	<!-- 通用查询方法 -->

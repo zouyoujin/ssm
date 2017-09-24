@@ -25,4 +25,10 @@ public interface UserBusiness extends BaseBusiness<User, Long>{
 	 * @return
 	 */
 	public User registerUser(UserTO userTO);
+	
+	/**
+	 * 清空用户相关缓存信息
+	 * @return
+	 */
+	public Boolean clearAllCache();
 }
