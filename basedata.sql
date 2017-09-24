@@ -1,6 +1,3 @@
-CREATE DATABASE basedata;
-USE basedata;
-
 -- ----------------------------
 -- Table structure for tbl_users
 -- ----------------------------
@@ -12,8 +9,11 @@ CREATE TABLE `tbl_users` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '用户创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '用户更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COMMENT='系统用户';
+) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='系统用户';
 
+-- ----------------------------
+-- Table structure for tbl_sys_dict
+-- ----------------------------
 DROP TABLE IF EXISTS `tbl_sys_dict`;
 CREATE TABLE `tbl_sys_dict` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户ID主键',
@@ -23,4 +23,4 @@ CREATE TABLE `tbl_sys_dict` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '用户更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 COMMENT='数据字典';
+) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='数据字典';
