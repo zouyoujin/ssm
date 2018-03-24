@@ -8,7 +8,7 @@ import com.ssm.common.model.User;
 import com.ssm.datasource.model.BaseMapper;
 
 @Repository
-public interface UserMapper extends BaseMapper<User, Long>{
+public interface UserMapper extends BaseMapper<User>{
 	
 	/**
 	 * 批量添加数据

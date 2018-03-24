@@ -96,7 +96,7 @@ public class AuthorizationInterceptor implements ContainerRequestFilter {
 		// String userRole = userMgr.getUserRole(username);
 		String userRole = "ADMIN";
 
-		// Step 2. Verify user role
+		   // Step 2. Verify user role
 		if (rolesSet.contains(userRole)) {
 			isAllowed = true;
 		}

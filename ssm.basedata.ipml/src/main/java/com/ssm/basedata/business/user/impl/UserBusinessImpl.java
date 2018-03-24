@@ -1,10 +1,8 @@
 package com.ssm.basedata.business.user.impl;
 
-import javax.annotation.Resource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -26,32 +24,28 @@ import com.ssm.datasource.common.BaseBusinessImpl;
  */
 @Service("userBusinessImpl")
 @Transactional(rollbackFor = { Exception.class })
-public class UserBusinessImpl extends BaseBusinessImpl<User, Long> implements UserBusiness {
+@CacheConfig(cacheNames = "users")
+public class UserBusinessImpl extends BaseBusinessImpl<User> implements UserBusiness {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserBusinessImpl.class);
-
-	@Resource
-	private UserMapper userMapper;
-
-	@Autowired
-	public void setBaseMapper(UserMapper userMapper) {
-		super.setBaseMapper(userMapper);
-	}
 
 	@Cacheable(cacheNames = "users", keyGenerator = "cacheKeyGenerator")
 	@Transactional(transactionManager = "transactionManager", readOnly = true)
 	@Override
 	public User getUserById(Long id) {
 		logger.info("database getUserById id = " + id);
-		return userMapper.selectByPrimaryKey(id);
+		return ((UserMapper) mapper).selectById(id);
 	}
 
 	@CachePut(cacheNames = "users", key = "#userTO.getUsername()")
 	@Transactional(transactionManager = "transactionManager", rollbackFor = { Exception.class })
 	@Override
 	public User registerUser(UserTO userTO) {
-		User user = new User(userTO);
-		userMapper.insert(user);
+		//TO->Model
+		User user = new User();
+		user.setAccount(userTO.getUsername());
+		
+		((UserMapper) mapper).insert(user);
 		return user;
 	}
 

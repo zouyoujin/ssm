@@ -20,5 +20,6 @@
 	<dubbo:protocol name="rest" port="${dubbo.basedatarest.port}" contextpath="${dubbo.basedatarest.contextpath}" server="servlet" />
 
 	<dubbo:service interface="com.ssm.basedata.rest.UserServiceRest" ref="userServiceRestImpl" protocol="rest" />
+	<dubbo:service interface="com.ssm.basedata.rest.SysDictServiceRest" ref="sysDictServiceRestImpl" protocol="rest" />
 	
 </beans>

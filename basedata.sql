@@ -2,18 +2,34 @@
 -- Table structure for tbl_users
 -- ----------------------------
 DROP TABLE IF EXISTS `tbl_users`;
-CREATE TABLE `tbl_users` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID主键',
-  `username` varchar(50) NOT NULL COMMENT '用户名称',
-  `password` varchar(32) NOT NULL COMMENT '用户密码',
-  `phone` varchar(20) DEFAULT NULL COMMENT '注册手机号',
-  `email` varchar(50) DEFAULT NULL COMMENT '注册邮箱',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '用户创建时间',
-  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '用户更新时间',
+CREATE TABLE IF NOT EXISTS `tbl_users` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `account` varchar(20) DEFAULT NULL COMMENT '登陆帐户',
+  `password` varchar(50) DEFAULT NULL COMMENT '密码',
+  `user_type` varchar(2) DEFAULT '1' COMMENT '用户类型(1普通用户2管理员3系统用户)',
+  `user_name` varchar(30) DEFAULT NULL COMMENT '姓名',
+  `name_pinyin` varchar(64) DEFAULT NULL COMMENT '姓名拼音',
+  `sex` int(1) NOT NULL DEFAULT '0' COMMENT '性别(0:未知;1:男;2:女)',
+  `avatar` varchar(500) DEFAULT NULL COMMENT '头像',
+  `phone` varchar(50) DEFAULT NULL COMMENT '电话',
+  `email` varchar(64) DEFAULT NULL COMMENT '邮箱',
+  `id_card` varchar(18) DEFAULT NULL COMMENT '身份证号码',
+  `wei_xin` varchar(32) DEFAULT NULL COMMENT '微信',
+  `wei_bo` varchar(32) DEFAULT NULL COMMENT '微博',
+  `qq` varchar(32) DEFAULT NULL COMMENT 'QQ',
+  `birth_day` date DEFAULT NULL COMMENT '出生日期',
+  `dept_id` bigint(20) DEFAULT NULL COMMENT '部门编号',
+  `position` varchar(64) DEFAULT NULL COMMENT '职位',
+  `address` varchar(256) DEFAULT NULL COMMENT '详细地址',
+  `staff_no` varchar(32) DEFAULT NULL COMMENT '工号',
+  `enable` tinyint(1) DEFAULT '1',
+  `remark` varchar(1024) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `create_by` bigint(20) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `update_by` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`) USING BTREE,
-  UNIQUE KEY `phone` (`phone`) USING BTREE,
-  UNIQUE KEY `email` (`email`) USING BTREE
+  UNIQUE KEY `account` (`account`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 -- ----------------------------
@@ -45,7 +61,16 @@ CREATE TABLE `tbl_sys_dict` (
   `dict_type` varchar(50) NOT NULL DEFAULT '' COMMENT '字典类型',
   `dict_key` varchar(50) NOT NULL DEFAULT '' COMMENT '键',
   `dict_value` varchar(100) NOT NULL DEFAULT '' COMMENT '值',
+  `parent_type` varchar(50) DEFAULT NULL COMMENT '父节点类型',
+  `parent_key` varchar(50) DEFAULT NULL COMMENT '父节点键',
+  `sort_no` int(10) DEFAULT NULL COMMENT '字典排序编号',
+  `editable` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否可编辑',
+  `enable` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否可用',
+  `remark` varchar(500) DEFAULT NULL COMMENT '备注',
+  `create_by` bigint(20) NOT NULL COMMENT '创建人',
+  `update_by` bigint(20) NOT NULL COMMENT '更新人',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '用户更新时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='数据字典';
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `dict_type_key` (`dict_type`,`dict_key`)
+) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='数据字典明细表';

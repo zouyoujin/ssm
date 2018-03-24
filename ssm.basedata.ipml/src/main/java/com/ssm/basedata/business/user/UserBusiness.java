@@ -10,7 +10,7 @@ import com.ssm.datasource.common.BaseBusiness;
  * @author Kitty
  *
  */
-public interface UserBusiness extends BaseBusiness<User, Long>{
+public interface UserBusiness extends BaseBusiness<User>{
 
 	/**
 	 * 根据用户ID查询用户数据

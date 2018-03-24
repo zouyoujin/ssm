@@ -12,23 +12,6 @@
 		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
 	</resultMap>
 	
-	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.ssm.common.model.User">
-		insert into tbl_users (username,password,phone,email,create_time,update_time)
-		values (
-			#{username,jdbcType=VARCHAR},
-			#{password,jdbcType=VARCHAR},
-			#{phone,jdbcType=VARCHAR},
-			#{email,jdbcType=VARCHAR},
-			#{createTime,jdbcType=TIMESTAMP},
-			#{updateTime,jdbcType=TIMESTAMP}
-		)
-	</insert>
-	
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-		delete from tbl_users
-		where id = #{id,jdbcType=BIGINT}
-	</delete>
-	
 	<!-- 用户自定义SQL文件部分开始 -->
 	<insert id="batchInsertRecord" parameterType="java.util.List">  
 	    insert into tbl_users (username,password,phone,email,create_time,update_time)
@@ -55,15 +38,6 @@
 			where id = #{item.id,jdbcType=BIGINT}
 		</foreach>
 	</update>
-	
-	<select id="selectByPrimaryKey" resultMap="BaseResultMap">
-		select t.id,t.username,t.password,t.phone,t.email,t.create_time,t.update_time from tbl_users t
-		where t.id = #{item.id,jdbcType=BIGINT}
-	</select>
-		
-	<select id="selectAll" resultMap="BaseResultMap">
-		select t.id,t.username,t.password,t.phone,t.email,t.create_time,t.update_time from tbl_users t
-	</select>
 	
 	<!-- 通用查询方法 -->
 	<select id="queryListMapByConditions" parameterType="java.util.Map" resultType="java.util.HashMap">

@@ -17,5 +17,5 @@
 	
 	<!-- 要引用的服务 -->
 	<dubbo:reference id="userServiceImpl" interface="com.ssm.basedata.service.UserService" check="false" />
-	
+	<dubbo:reference id="sysDictServiceImpl" interface="com.ssm.basedata.service.SysDictService" check="false" />
 </beans>
