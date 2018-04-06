@@ -7,19 +7,19 @@ import com.ssm.common.support.HttpCode;
  * @author Kitty
  *
  */
-public class BusinessException extends BaseException {
+public class ServiceException extends BaseException {
 
 	private static final long serialVersionUID = 7649778455444131608L;
 
-	public BusinessException(String message) {
+	public ServiceException(String message) {
 		super(message);
 	}
 
-	public BusinessException(String message, Throwable cause) {
+	public ServiceException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	public BusinessException(Throwable cause) {
+	public ServiceException(Throwable cause) {
 		super(cause);
 	}
 
