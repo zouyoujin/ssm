@@ -1,6 +1,6 @@
 package com.ssm.basedata.service;
 
-import com.ssm.common.exception.BusinessException;
+import com.ssm.common.exception.ServiceException;
 import com.ssm.common.model.User;
 import com.ssm.common.pojo.UserTO;
 
@@ -17,7 +17,7 @@ public interface UserService {
 	 * @param id
 	 * @return
 	 */
-	public User getUserById(Long id) throws BusinessException;
+	public User getUserById(Long id) throws ServiceException;
 
 	/**
 	 * 用户注册处理
@@ -25,12 +25,12 @@ public interface UserService {
 	 * @param userTO
 	 * @return
 	 */
-	public User registerUser(UserTO userTO) throws BusinessException;
+	public User registerUser(UserTO userTO) throws ServiceException;
 	
 	/**
 	 * 清空用户相关缓存信息
 	 * @param userTO
 	 * @return 成功:true 失败:false
 	 */
-	public Boolean clearAllCache() throws BusinessException;
+	public Boolean clearAllCache() throws ServiceException;
 }
