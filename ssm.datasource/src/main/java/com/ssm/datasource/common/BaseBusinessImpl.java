@@ -32,7 +32,7 @@ import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.baomidou.mybatisplus.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.toolkit.ReflectionKit;
 import com.ssm.common.constant.Constants;
-import com.ssm.common.exception.BusinessException;
+import com.ssm.common.exception.ServiceException;
 import com.ssm.common.model.BaseModel;
 import com.ssm.common.utils.DataUtil;
 import com.ssm.common.utils.InstanceUtil;
@@ -183,33 +183,33 @@ public abstract class BaseBusinessImpl<T extends BaseModel> implements BaseBusin
 	 */
 	public List<T> getListByIds(final List<Long> ids) {
 		final List<T> list = InstanceUtil.newArrayList();
-//		if (ids != null) {
-//			for (int i = 0; i < ids.size(); i++) {
-//				list.add(null);
-//			}
-//			final Map<Integer, Object> thread = InstanceUtil.newConcurrentHashMap();
-//			final String datasource = HandleDataSource.getDataSource();
-//			for (int i = 0; i < ids.size(); i++) {
-//				final int index = i;
-//				executorService.execute(new Runnable() {
-//					public void run() {
-//						HandleDataSource.putDataSource(datasource);
-//						try {
-//							list.set(index, queryById(ids.get(index)));
-//						} finally {
-//							thread.put(index, 0);
-//						}
-//					}
-//				});
-//			}
-//			while (thread.size() < list.size()) {
-//				try {
-//					Thread.sleep(threadSleep);
-//				} catch (InterruptedException e) {
-//					logger.error("", e);
-//				}
-//			}
-//		}
+		if (ids != null) {
+			for (int i = 0; i < ids.size(); i++) {
+				list.add(null);
+			}
+			final Map<Integer, Object> thread = InstanceUtil.newConcurrentHashMap();
+			//final String datasource = HandleDataSource.getDataSource();
+			for (int i = 0; i < ids.size(); i++) {
+				final int index = i;
+				executorService.execute(new Runnable() {
+					public void run() {
+						//HandleDataSource.putDataSource(datasource);
+						try {
+							list.set(index, queryById(ids.get(index)));
+						} finally {
+							thread.put(index, 0);
+						}
+					}
+				});
+			}
+			while (thread.size() < list.size()) {
+				try {
+					Thread.sleep(threadSleep);
+				} catch (InterruptedException e) {
+					logger.error("", e);
+				}
+			}
+		}
 		return list;
 	}
 
@@ -222,35 +222,35 @@ public abstract class BaseBusinessImpl<T extends BaseModel> implements BaseBusin
 	 */
 	public <K> List<K> getListByIds(final List<Long> ids, final Class<K> cls) {
 		final List<K> list = InstanceUtil.newArrayList();
-//		if (ids != null) {
-//			for (int i = 0; i < ids.size(); i++) {
-//				list.add(null);
-//			}
-//			final Map<Integer, Object> thread = InstanceUtil.newConcurrentHashMap();
-//			final String datasource = HandleDataSource.getDataSource();
-//			for (int i = 0; i < ids.size(); i++) {
-//				final int index = i;
-//				executorService.execute(new Runnable() {
-//					public void run() {
-//						HandleDataSource.putDataSource(datasource);
-//						try {
-//							T t = queryById(ids.get(index));
-//							K k = InstanceUtil.to(t, cls);
-//							list.set(index, k);
-//						} finally {
-//							thread.put(index, 0);
-//						}
-//					}
-//				});
-//			}
-//			while (thread.size() < list.size()) {
-//				try {
-//					Thread.sleep(threadSleep);
-//				} catch (InterruptedException e) {
-//					logger.error("", e);
-//				}
-//			}
-//		}
+		if (ids != null) {
+			for (int i = 0; i < ids.size(); i++) {
+				list.add(null);
+			}
+			final Map<Integer, Object> thread = InstanceUtil.newConcurrentHashMap();
+			//final String datasource = HandleDataSource.getDataSource();
+			for (int i = 0; i < ids.size(); i++) {
+				final int index = i;
+				executorService.execute(new Runnable() {
+					public void run() {
+						//HandleDataSource.putDataSource(datasource);
+						try {
+							T t = queryById(ids.get(index));
+							K k = InstanceUtil.to(t, cls);
+							list.set(index, k);
+						} finally {
+							thread.put(index, 0);
+						}
+					}
+				});
+			}
+			while (thread.size() < list.size()) {
+				try {
+					Thread.sleep(threadSleep);
+				} catch (InterruptedException e) {
+					logger.error("", e);
+				}
+			}
+		}
 		return list;
 	}
 
@@ -261,38 +261,38 @@ public abstract class BaseBusinessImpl<T extends BaseModel> implements BaseBusin
 	 * @return
 	 */
 	public Page<Map<String, Object>> getPageMap(final Page<Long> ids) {
-//		if (ids != null) {
-//			Page<Map<String, Object>> page = new Page<Map<String, Object>>(ids.getCurrent(), ids.getSize());
-//			page.setTotal(ids.getTotal());
-//			final List<Map<String, Object>> records = InstanceUtil.newArrayList();
-//			for (int i = 0; i < ids.getRecords().size(); i++) {
-//				records.add(null);
-//			}
-//			final Map<Integer, Object> thread = InstanceUtil.newConcurrentHashMap();
-//			final String datasource = HandleDataSource.getDataSource();
-//			for (int i = 0; i < ids.getRecords().size(); i++) {
-//				final int index = i;
-//				executorService.execute(new Runnable() {
-//					public void run() {
-//						HandleDataSource.putDataSource(datasource);
-//						try {
-//							records.set(index, InstanceUtil.transBean2Map(queryById(ids.getRecords().get(index))));
-//						} finally {
-//							thread.put(index, 0);
-//						}
-//					}
-//				});
-//			}
-//			while (thread.size() < records.size()) {
-//				try {
-//					Thread.sleep(threadSleep);
-//				} catch (InterruptedException e) {
-//					logger.error("", e);
-//				}
-//			}
-//			page.setRecords(records);
-//			return page;
-//		}
+		if (ids != null) {
+			Page<Map<String, Object>> page = new Page<Map<String, Object>>(ids.getCurrent(), ids.getSize());
+			page.setTotal(ids.getTotal());
+			final List<Map<String, Object>> records = InstanceUtil.newArrayList();
+			for (int i = 0; i < ids.getRecords().size(); i++) {
+				records.add(null);
+			}
+			final Map<Integer, Object> thread = InstanceUtil.newConcurrentHashMap();
+			//final String datasource = HandleDataSource.getDataSource();
+			for (int i = 0; i < ids.getRecords().size(); i++) {
+				final int index = i;
+				executorService.execute(new Runnable() {
+					public void run() {
+						//HandleDataSource.putDataSource(datasource);
+						try {
+							records.set(index, InstanceUtil.transBean2Map(queryById(ids.getRecords().get(index))));
+						} finally {
+							thread.put(index, 0);
+						}
+					}
+				});
+			}
+			while (thread.size() < records.size()) {
+				try {
+					Thread.sleep(threadSleep);
+				} catch (InterruptedException e) {
+					logger.error("", e);
+				}
+			}
+			page.setRecords(records);
+			return page;
+		}
 		return new Page<Map<String, Object>>();
 	}
 
@@ -388,7 +388,7 @@ public abstract class BaseBusinessImpl<T extends BaseModel> implements BaseBusin
 			}
 		} catch (DuplicateKeyException e) {
 			logger.error(Constants.Exception_Head, e);
-			throw new BusinessException("已经存在相同的记录.");
+			throw new ServiceException("已经存在相同的记录.");
 		} catch (Exception e) {
 			logger.error(Constants.Exception_Head, e);
 			throw new RuntimeException(e);
@@ -424,7 +424,7 @@ public abstract class BaseBusinessImpl<T extends BaseModel> implements BaseBusin
 			}
 		} catch (DuplicateKeyException e) {
 			logger.error(Constants.Exception_Head, e);
-			throw new BusinessException("已经存在相同的记录.");
+			throw new ServiceException("已经存在相同的记录.");
 		} catch (Exception e) {
 			logger.error(Constants.Exception_Head, e);
 			throw new RuntimeException(e);
@@ -541,84 +541,83 @@ public abstract class BaseBusinessImpl<T extends BaseModel> implements BaseBusin
 
 	/** 根据Id查询(默认类型T) */
 	protected Page<T> getPage(final Page<Long> ids) {
-//		if (ids != null) {
-//			Page<T> page = new Page<T>(ids.getCurrent(), ids.getSize());
-//			page.setTotal(ids.getTotal());
-//			final List<T> records = InstanceUtil.newArrayList();
-//			for (int i = 0; i < ids.getRecords().size(); i++) {
-//				records.add(null);
-//			}
-//			final Map<Integer, Object> thread = InstanceUtil.newConcurrentHashMap();
-//			final String datasource = HandleDataSource.getDataSource();
-//			for (int i = 0; i < ids.getRecords().size(); i++) {
-//				final int index = i;
-//				executorService.execute(new Runnable() {
-//					public void run() {
-//						HandleDataSource.putDataSource(datasource);
-//						try {
-//							records.set(index, queryById(ids.getRecords().get(index)));
-//						} finally {
-//							thread.put(index, 0);
-//						}
-//					}
-//				});
-//			}
-//			while (thread.size() < records.size()) {
-//				try {
-//					Thread.sleep(threadSleep);
-//				} catch (InterruptedException e) {
-//					logger.error("", e);
-//				}
-//			}
-//			page.setRecords(records);
-//			return page;
-//		}
+		if (ids != null) {
+			Page<T> page = new Page<T>(ids.getCurrent(), ids.getSize());
+			page.setTotal(ids.getTotal());
+			final List<T> records = InstanceUtil.newArrayList();
+			for (int i = 0; i < ids.getRecords().size(); i++) {
+				records.add(null);
+			}
+			final Map<Integer, Object> thread = InstanceUtil.newConcurrentHashMap();
+			//final String datasource = HandleDataSource.getDataSource();
+			for (int i = 0; i < ids.getRecords().size(); i++) {
+				final int index = i;
+				executorService.execute(new Runnable() {
+					public void run() {
+						//HandleDataSource.putDataSource(datasource);
+						try {
+							records.set(index, queryById(ids.getRecords().get(index)));
+						} finally {
+							thread.put(index, 0);
+						}
+					}
+				});
+			}
+			while (thread.size() < records.size()) {
+				try {
+					Thread.sleep(threadSleep);
+				} catch (InterruptedException e) {
+					logger.error("", e);
+				}
+			}
+			page.setRecords(records);
+			return page;
+		}
 		return new Page<T>();
 	}
 
 	/** 根据Id查询(cls返回类型Class) */
 	private <K> Page<K> getPage(final Page<Long> ids, final Class<K> cls) {
-//		if (ids != null) {
-//			Page<K> page = new Page<K>(ids.getCurrent(), ids.getSize());
-//			page.setTotal(ids.getTotal());
-//			final List<K> records = InstanceUtil.newArrayList();
-//			for (int i = 0; i < ids.getRecords().size(); i++) {
-//				records.add(null);
-//			}
-//			final Map<Integer, Object> thread = InstanceUtil.newConcurrentHashMap();
-//			final String datasource = HandleDataSource.getDataSource();
-//			for (int i = 0; i < ids.getRecords().size(); i++) {
-//				final int index = i;
-//				executorService.execute(new Runnable() {
-//					public void run() {
-//						HandleDataSource.putDataSource(datasource);
-//						try {
-//							T t = queryById(ids.getRecords().get(index));
-//							K k = InstanceUtil.to(t, cls);
-//							records.set(index, k);
-//						} finally {
-//							thread.put(index, 0);
-//						}
-//					}
-//				});
-//			}
-//			while (thread.size() < records.size()) {
-//				try {
-//					Thread.sleep(threadSleep);
-//				} catch (InterruptedException e) {
-//					logger.error("", e);
-//				}
-//			}
-//			page.setRecords(records);
-//			return page;
-//		}
+		if (ids != null) {
+			Page<K> page = new Page<K>(ids.getCurrent(), ids.getSize());
+			page.setTotal(ids.getTotal());
+			final List<K> records = InstanceUtil.newArrayList();
+			for (int i = 0; i < ids.getRecords().size(); i++) {
+				records.add(null);
+			}
+			final Map<Integer, Object> thread = InstanceUtil.newConcurrentHashMap();
+			//final String datasource = HandleDataSource.getDataSource();
+			for (int i = 0; i < ids.getRecords().size(); i++) {
+				final int index = i;
+				executorService.execute(new Runnable() {
+					public void run() {
+						//HandleDataSource.putDataSource(datasource);
+						try {
+							T t = queryById(ids.getRecords().get(index));
+							K k = InstanceUtil.to(t, cls);
+							records.set(index, k);
+						} finally {
+							thread.put(index, 0);
+						}
+					}
+				});
+			}
+			while (thread.size() < records.size()) {
+				try {
+					Thread.sleep(threadSleep);
+				} catch (InterruptedException e) {
+					logger.error("", e);
+				}
+			}
+			page.setRecords(records);
+			return page;
+		}
 		return new Page<K>();
 	}
 
-	@SuppressWarnings("unchecked")
 	private T queryById(Long id, int times) {
-		//String key = getCacheKey(id);
-		T record = null;
+//		String key = getCacheKey(id);
+//		T record = null;
 //		try {
 //			record = (T) CacheUtil.getCache().getFire(key);
 //		} catch (Exception e) {
@@ -652,6 +651,7 @@ public abstract class BaseBusinessImpl<T extends BaseModel> implements BaseBusin
 //				}
 //			}
 //		}
+		T record = mapper.selectById(id);
 		return record;
 	}
 
